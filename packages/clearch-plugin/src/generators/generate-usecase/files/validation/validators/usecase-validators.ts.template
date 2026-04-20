@@ -1,0 +1,6 @@
+import type { Validator } from '@validation/contracts';
+import { RequiredFieldValidator } from '@validation/validators/required-field';
+
+export function __USE_CASE_CAMEL__Validators(): Validator[] {
+  return [new RequiredFieldValidator('name'), new RequiredFieldValidator('email')];
+}

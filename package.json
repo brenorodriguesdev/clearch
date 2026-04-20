@@ -2,10 +2,19 @@
   "name": "@clearch-workspace/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "build": "nx run-many -t build --projects=clearch-plugin,clearch",
+    "build:plugin": "nx build clearch-plugin",
+    "build:cli": "nx build clearch",
+    "dev:cli": "node packages/clearch/dist/cli.ts",
+    "test:cli": "npm run build:cli && node packages/clearch/dist/cli.js",
+    "link:cli": "cd packages/clearch && npm link && cd ../../ && echo '✓ clearch linked globally'",
+    "unlink:cli": "npm unlink -g clearch && echo '✓ clearch unlinked'"
+  },
   "private": true,
   "dependencies": {},
   "devDependencies": {
+    "@types/node": "^22.10.2",
     "@nx/js": "22.6.4",
     "@swc-node/register": "~1.11.1",
     "@swc/core": "~1.15.5",

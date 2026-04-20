@@ -1,0 +1,24 @@
+import type { __USE_CASE_PASCAL__Service } from '@data/services/__USE_CASE_KEBAB__';
+import type { Validator } from '@validation/contracts';
+import type { Controller, HttpRequest, HttpResponse } from '@presentation/contracts';
+import { badRequest, ok, serverError } from '@presentation/helpers';
+
+export class __USE_CASE_PASCAL__Controller implements Controller {
+  constructor(
+    private readonly validator: Validator,
+    private readonly service: __USE_CASE_PASCAL__Service
+  ) {}
+
+  async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
+    try {
+      const validationError = this.validator.validate(httpRequest.body);
+      if (validationError) {
+        return badRequest(validationError.message);
+      }
+      await this.service.execute();
+      return ok({ done: true });
+    } catch {
+      return serverError('Unexpected error');
+    }
+  }
+}

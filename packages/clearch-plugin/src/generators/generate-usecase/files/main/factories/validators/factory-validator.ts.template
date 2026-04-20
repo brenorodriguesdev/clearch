@@ -1,0 +1,11 @@
+import type { Validator } from '@validation/contracts';
+import { ValidatorComposite } from '@validation/validators';
+import { __USE_CASE_CAMEL__Validators } from '@validation/validators/__USE_CASE_KEBAB__';
+
+export function make__USE_CASE_PASCAL__Validator(): Validator {
+  const validations: Validator[] = [];
+  for (const validator of __USE_CASE_CAMEL__Validators()) {
+    validations.push(validator);
+  }
+  return new ValidatorComposite(validations);
+}

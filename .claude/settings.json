@@ -1,0 +1,42 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(nx build:*)",
+      "Bash(node packages/clearch/dist/cli.js --version)",
+      "Bash(npm link:*)",
+      "Bash(clearch --version)",
+      "Bash(clearch --help)",
+      "Bash(clearch generate:*)",
+      "Bash(clearch init:*)",
+      "Bash(node packages/clearch/dist/cli.js --help)",
+      "Bash(npm unlink:*)",
+      "Bash(set -e)",
+      "Bash(npm run:*)",
+      "Bash(node packages/clearch/dist/cli.js init --help)",
+      "Read(//usr/local/bin/**)",
+      "Bash(npm list:*)",
+      "Bash(/Users/brenorodrigues/.nvm/versions/node/v24.14.0/bin/clearch --version)",
+      "Read(//private/tmp/**)",
+      "Bash(chmod +x packages/clearch/dist/cli.js)",
+      "Bash(rm -rf test-refactor)",
+      "Bash(node /Users/brenorodrigues/Downloads/template/packages/clearch/dist/cli.js init test-refactor)",
+      "Read(//tmp/**)",
+      "Bash(node /Users/brenorodrigues/Downloads/template/packages/clearch/dist/cli.js generate usecase create-item)",
+      "Bash(rm -rf test-tooling-setup)",
+      "Bash(node /Users/brenorodrigues/Downloads/template/packages/clearch/dist/cli.js init test-tooling-setup)",
+      "Bash(npm cache:*)",
+      "Bash(tsc --version)",
+      "Bash(tsc -p tsconfig.json --listFiles)",
+      "Bash(npm config:*)",
+      "Bash(ln -sf \"$\\(pwd\\)/dist/cli.js\" /usr/local/bin/clearch)",
+      "Bash(chmod +x dist/cli.js)",
+      "Bash(chmod +x /Users/brenorodrigues/Downloads/template/packages/clearch/dist/cli.js)",
+      "Read(//Users/brenorodrigues/**)",
+      "Bash(printf '\\\\n')",
+      "Bash(node -e \"const { spawn } = require\\('child_process'\\); const p = spawn\\('clearch', ['init', 'infra'], {stdio: ['pipe', 'inherit', 'inherit']}\\); setTimeout\\(\\(\\) => { p.stdin.write\\('\\\\n'\\); setTimeout\\(\\(\\) => p.stdin.end\\(\\), 100\\); }, 500\\);\")"
+    ],
+    "additionalDirectories": [
+      "/tmp"
+    ]
+  }
+}

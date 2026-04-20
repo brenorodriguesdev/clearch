@@ -1,0 +1,21 @@
+{
+  "name": "clearch",
+  "version": "0.1.0",
+  "description": "CLI to scaffold Node.js + TypeScript APIs with adapter-based Express decoupling",
+  "license": "MIT",
+  "type": "commonjs",
+  "bin": {
+    "clearch": "./dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@clearch/plugin": "0.1.0",
+    "commander": "^12.1.0",
+    "inquirer": "^8.2.6"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^8.2.10"
+  }
+}

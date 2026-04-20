@@ -1,109 +1,113 @@
-# ClearchWorkspace
+# clearch workspace
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+Monorepo for **clearch**, a public npm CLI that scaffolds Node.js + TypeScript APIs with Express isolated behind adapters. Presentation controllers depend only on `HttpRequest` / `HttpResponse` contracts.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+## Packages
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/nx-api/js?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+| Package | Purpose |
+|--------|---------|
+| `packages/clearch-plugin` (`@clearch/plugin`) | Generators, templates, and shared generation logic (`init`, `generate usecase`, `install auth|hash|db`). |
+| `packages/clearch` (`clearch`) | Public CLI (`clearch` bin) built with Commander and Inquirer (interactive `install db`). |
 
-## Generate a library
+Nx is used internally for builds and project structure; **end users do not need Nx** to use the CLI.
 
-```sh
-npx nx g @nx/js:lib packages/pkg1 --publishable --importPath=@my-org/pkg1
+Generated apps use **TypeScript path aliases** (`@domain/*`, `@data/*`, `@infra/*`, `@presentation/*`, `@validation/*`, `@main/*`). **`tsx`** resolves them in development; **`path-register.cjs`** (via `tsconfig-paths`) maps aliases to `dist/*` for `npm start` after `tsc`.
+
+## Architecture philosophy (generated apps)
+
+Generated projects use a **practical** layout (not a heavy layered “clean” stack):
+
+- **`domain/models`** — small types (`ExampleModel`, etc.). No frameworks.
+- **`data/contracts`** — repository interfaces.
+- **`data/services`** — services that implement the flow using those contracts.
+- **`infra/repositories`** — concrete repositories (e.g. in-memory).
+- **`presentation`** — `Controller`, `HttpRequest` / `HttpResponse` (`contracts/http.ts`), helpers, framework-agnostic controllers.
+- **`validation`** — `Validator` contract, `RequiredFieldValidator`, `ValidatorComposite`, composed in factories.
+- **`main`** — Express app, **`adaptRouter`** in `adapters/express-controller.ts`, thin routes, small factories.
+
+### Why controllers are decoupled from Express
+
+Express types (`Request`, `Response`) stay in `main`. Presentation defines portable contracts; **only `main/adapters`** maps Express to `HttpRequest` / `HttpResponse`.
+
+### How `adaptRouter` works
+
+`adaptRouter(controller)` (from `src/main/adapters/express-controller.ts`) returns Express middleware that maps `req` → `HttpRequest`, calls `controller.handle`, then writes `HttpResponse` to `res`.
+
+```ts
+router.post('/examples', adaptRouter(makeCreateExampleController()));
 ```
 
-## Run tasks
+## Build (workspace)
 
-To build the library use:
-
-```sh
-npx nx build pkg1
+```bash
+npm install
+npm run build
 ```
 
-To run any task with Nx use:
+Equivalent:
 
-```sh
-npx nx <target> <project-name>
+```bash
+nx build clearch-plugin
+nx build clearch
 ```
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+## Run the CLI locally
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+After a successful build:
 
-## Versioning and releasing
-
-To version and release the library use
-
-```
-npx nx release
-```
-
-Pass `--dry-run` to see what would happen without actually releasing the library.
-
-[Learn more about Nx release &raquo;](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Keep TypeScript project references up to date
-
-Nx automatically updates TypeScript [project references](https://www.typescriptlang.org/docs/handbook/project-references.html) in `tsconfig.json` files to ensure they remain accurate based on your project dependencies (`import` or `require` statements). This sync is automatically done when running tasks such as `build` or `typecheck`, which require updated references to function correctly.
-
-To manually trigger the process to sync the project graph dependencies information to the TypeScript project references, run the following command:
-
-```sh
-npx nx sync
+```bash
+node packages/clearch/dist/cli.js init my-service
+cd my-service && npm install
+node packages/clearch/dist/cli.js install auth --cwd ./my-service
+node packages/clearch/dist/cli.js install hash --cwd ./my-service
+node packages/clearch/dist/cli.js install db --cwd ./my-service   # interactive DB choice
+node packages/clearch/dist/cli.js generate usecase create-user --cwd ./my-service
 ```
 
-You can enforce that the TypeScript project references are always in the correct state when running in CI by adding a step to your CI job configuration that runs the following command:
+Or link globally:
 
-```sh
-npx nx sync:check
+```bash
+cd packages/clearch && npm link
+clearch init my-service
 ```
 
-[Learn more about nx sync](https://nx.dev/reference/nx-commands#sync)
+## Test the generated app
 
-## Set up CI!
-
-### Step 1
-
-To connect to Nx Cloud, run the following command:
-
-```sh
-npx nx connect
+```bash
+node packages/clearch/dist/cli.js init my-service -o /tmp
+cd /tmp/my-service
+npm install
+npm run dev
 ```
 
-Connecting to Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
+Example: `POST /examples` with JSON `{ "title": "hello" }`, then `GET /examples`.
 
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## Publishing
 
-### Step 2
+See [PUBLISHING.md](./PUBLISHING.md) for npm login, versioning, and publish commands for `@clearch/plugin` and `clearch`.
 
-Use the following command to configure a CI workflow for your workspace:
+## Example usage (after publish)
 
-```sh
-npx nx g ci-workflow
+```bash
+npx clearch init my-service
+cd my-service
+npm install
+npm run dev
 ```
 
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+Optional modules (run from the project root after `npm install`):
 
-## Install Nx Console
+```bash
+npx clearch install auth       # JWT contracts + JwtAdapter
+npx clearch install hash       # Hasher + BcryptHasher
+npx clearch install db         # interactive: PostgreSQL (TypeORM) or MongoDB (Mongoose)
+npx clearch install messaging  # interactive: queues (memory / RabbitMQ / SQS)
+```
 
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
+Inside an existing clearch project:
 
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+```bash
+npx clearch generate usecase create-user
+```
 
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/nx-api/js?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+Then register a route in `src/main/routes` using `adaptRouter(makeCreateUserController())`.

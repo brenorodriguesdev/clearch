@@ -1,0 +1,6 @@
+export class __USE_CASE_PASCAL__Service {
+  async execute(): Promise<{ ok: true }> {
+    // TODO: implement __USE_CASE_PASCAL__
+    return { ok: true };
+  }
+}

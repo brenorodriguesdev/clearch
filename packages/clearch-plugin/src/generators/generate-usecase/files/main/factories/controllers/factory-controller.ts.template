@@ -1,0 +1,9 @@
+import { __USE_CASE_PASCAL__Service } from '@data/services/__USE_CASE_KEBAB__';
+import { __USE_CASE_PASCAL__Controller } from '@presentation/controllers/__USE_CASE_KEBAB__';
+import { make__USE_CASE_PASCAL__Validator } from '@main/factories/validators/__USE_CASE_KEBAB__';
+
+export function make__USE_CASE_PASCAL__Controller(): __USE_CASE_PASCAL__Controller {
+  const service = new __USE_CASE_PASCAL__Service();
+  const validator = make__USE_CASE_PASCAL__Validator();
+  return new __USE_CASE_PASCAL__Controller(validator, service);
+}

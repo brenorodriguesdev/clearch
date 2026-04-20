@@ -1,0 +1,19 @@
+{
+  "name": "__PROJECT_NAME__-infra",
+  "version": "0.1.0",
+  "description": "AWS CDK infrastructure for __PROJECT_NAME_PASCAL__",
+  "main": "dist/bin/app.js",
+  "scripts": {
+    "build": "tsc",
+    "cdk": "cdk"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.120.0",
+    "constructs": "^10.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "ts-node": "^10.9.0"
+  }
+}

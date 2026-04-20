@@ -1,0 +1,22 @@
+{
+  "name": "clearch-plugin",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/clearch-plugin/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/packages/clearch-plugin/dist"],
+      "options": {
+        "cwd": "packages/clearch-plugin",
+        "commands": [
+          "rm -rf dist tsconfig.tsbuildinfo",
+          "tsc -p tsconfig.json",
+          "mkdir -p dist/generators && cp -R src/generators/. dist/generators/"
+        ],
+        "parallel": false
+      }
+    }
+  },
+  "tags": []
+}
