@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json.schemastore.org/nx-generator-schema",
+  "$id": "Usecase",
+  "title": "Generate Use Case",
+  "description": "Generate a new use case (vertical slice) with all boilerplate",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Use case name in kebab-case (e.g. create-user)",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    }
+  },
+  "required": ["name"]
+}

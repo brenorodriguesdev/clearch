@@ -7,6 +7,7 @@ import {
   runGenerateUsecase,
   runInitApi,
   runInitInfra,
+  runInitNxWorkspace,
   runInstallAuth,
   runInstallDb,
   runInstallGrpc,
@@ -77,17 +78,32 @@ program
 
       // Normal case: init project
       const out = path.resolve(opts.output);
-      console.log(`[clearch] initializing "${projectNameOrInfra}" in ${out}`);
-      await runInitApi({ projectName: projectNameOrInfra, outputDir: out });
-      const created = path.join(out, projectNameOrInfra);
-      console.log(`[clearch] created: ${created}`);
-      console.log('[clearch] next steps:');
-      console.log(`  cd ${path.join(projectNameOrInfra)}`);
-      console.log('  npm install');
-      console.log('  npm run build');
-      console.log('  clearch init infra     # add infrastructure (optional)');
-      console.log('  # clearch install http | grpc | mcp   # transports');
-      console.log('  # clearch install auth | hash | db | messaging');
+
+      // Ask if user wants Nx
+      const nxPrompt = await inquirer.prompt<{ useNx: boolean }>([
+        {
+          type: 'confirm',
+          name: 'useNx',
+          message: 'Use Nx workspace?',
+          default: false,
+        },
+      ]);
+
+      if (nxPrompt.useNx) {
+        await runInitNxWorkspace({ cwd: out, projectName: projectNameOrInfra });
+      } else {
+        console.log(`[clearch] initializing "${projectNameOrInfra}" in ${out}`);
+        await runInitApi({ projectName: projectNameOrInfra, outputDir: out });
+        const created = path.join(out, projectNameOrInfra);
+        console.log(`[clearch] created: ${created}`);
+        console.log('[clearch] next steps:');
+        console.log(`  cd ${path.join(projectNameOrInfra)}`);
+        console.log('  npm install');
+        console.log('  npm run build');
+        console.log('  ca init infra     # add infrastructure (optional)');
+        console.log('  # ca install http | grpc | mcp   # transports');
+        console.log('  # ca install auth | hash | db | messaging');
+      }
     } catch (error) {
       if (error && typeof error === 'object' && 'isTtyError' in error) {
         console.error('[clearch] Prompt could not be rendered in this environment.');

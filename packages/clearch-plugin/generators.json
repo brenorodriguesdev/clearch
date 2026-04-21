@@ -1,0 +1,10 @@
+{
+  "$schema": "http://json.schemastore.org/nx-generators",
+  "generators": {
+    "usecase": {
+      "factory": "./dist/nx-generators/usecase",
+      "schema": "./nx-generators/usecase/schema.json",
+      "description": "Generate a new use case (vertical slice)"
+    }
+  }
+}

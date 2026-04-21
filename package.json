@@ -11,7 +11,7 @@
     "link:cli": "cd packages/clearch && npm link && cd ../../ && echo '✓ clearch linked globally'",
     "unlink:cli": "npm unlink -g clearch && echo '✓ clearch unlinked'"
   },
-  "private": true,
+  "private": false,
   "dependencies": {},
   "devDependencies": {
     "@types/node": "^22.10.2",

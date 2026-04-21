@@ -1,5 +1,7 @@
 export { runInitApi } from './lib/init-api';
 export type { InitApiOptions } from './lib/init-api';
+export { runInitNxWorkspace } from './lib/init-nx-workspace';
+export type { InitNxWorkspaceOptions } from './lib/init-nx-workspace';
 export { runInitInfra } from './lib/init-infra';
 export type { InitInfraOptions, InfraProvider } from './lib/init-infra';
 export { runGenerateUsecase } from './lib/generate-usecase';

@@ -1,6 +1,6 @@
 {
-  "name": "@clearch/plugin",
-  "version": "0.1.0",
+  "name": "clearch-plugin",
+  "version": "0.2.0",
   "type": "commonjs",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -10,11 +10,16 @@
       "default": "./dist/index.js"
     }
   },
+  "generators": "./generators.json",
+  "executors": "./executors.json",
   "files": [
     "dist",
-    "src/generators"
+    "src/generators",
+    "generators.json",
+    "executors.json"
   ],
   "dependencies": {
+    "@nx/devkit": "22.6.4",
     "js-yaml": "^4.1.0"
   },
   "devDependencies": {

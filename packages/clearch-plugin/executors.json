@@ -1,0 +1,10 @@
+{
+  "$schema": "http://json.schemastore.org/nx-executors",
+  "executors": {
+    "install": {
+      "factory": "./dist/nx-executors/install",
+      "schema": "./nx-executors/install/schema.json",
+      "description": "Install optional modules (http, db, auth, messaging, etc.)"
+    }
+  }
+}

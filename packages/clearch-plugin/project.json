@@ -12,7 +12,11 @@
         "commands": [
           "rm -rf dist tsconfig.tsbuildinfo",
           "tsc -p tsconfig.json",
-          "mkdir -p dist/generators && cp -R src/generators/. dist/generators/"
+          "mkdir -p dist/generators && cp -R src/generators/. dist/generators/",
+          "cp generators.json executors.json dist/",
+          "mkdir -p dist/nx-generators dist/nx-executors",
+          "cp -R src/nx-generators/. dist/nx-generators/ 2>/dev/null || true",
+          "cp -R src/nx-executors/. dist/nx-executors/ 2>/dev/null || true"
         ],
         "parallel": false
       }

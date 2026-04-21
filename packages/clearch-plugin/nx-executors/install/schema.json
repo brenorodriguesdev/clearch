@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json.schemastore.org/nx-executor-schema",
+  "$id": "Install",
+  "title": "Install Clearch Module",
+  "description": "Install optional modules like http, db, auth, messaging, etc.",
+  "type": "object",
+  "properties": {
+    "module": {
+      "type": "string",
+      "description": "Module to install (http, grpc, mcp, auth, hash, db, messaging)",
+      "enum": ["http", "grpc", "mcp", "auth", "hash", "db", "messaging"],
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "provider": {
+      "type": "string",
+      "description": "Provider for db (postgres/mongodb) or messaging (memory/rabbitmq/sqs) — only needed for interactive modules"
+    }
+  },
+  "required": ["module"]
+}

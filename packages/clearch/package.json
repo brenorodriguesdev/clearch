@@ -1,17 +1,19 @@
 {
-  "name": "clearch",
-  "version": "0.1.0",
+  "name": "@brenorodriguesdev/clearch",
+  "version": "0.2.0",
   "description": "CLI to scaffold Node.js + TypeScript APIs with adapter-based Express decoupling",
   "license": "MIT",
   "type": "commonjs",
+  "private": false,
   "bin": {
-    "clearch": "./dist/cli.js"
+    "clearch": "dist/cli.js",
+    "ca": "dist/cli.js"
   },
   "files": [
     "dist"
   ],
   "dependencies": {
-    "@clearch/plugin": "0.1.0",
+    "clearch-plugin": "0.2.0",
     "commander": "^12.1.0",
     "inquirer": "^8.2.6"
   },
